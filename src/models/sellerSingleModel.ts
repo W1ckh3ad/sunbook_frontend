@@ -1,5 +1,5 @@
-import { BookModel, UserDescription, UserModel } from "models";
+import { BookModel, UserDescription, UserModel } from "src/models";
 
 export type SellerSingleModel = {
-  books: (UserDescription & BookModel)[];
+  sellers: (UserDescription & BookModel)[];
 } & UserModel;

@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@media (max-width: 700px) {
+  div#__next div header div .nav-elem {
+    display: none;
+  }
+}
+html {
+  font-size: 16px;
+}
+
+body,
+#__next {
+  overflow-x: hidden;
+  width: 100vw;
+}
+
+main.responsive {
+  overflow-x: hidden;
+  max-width: min(1024px, 95%);
+  min-width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1rem 2rem;
+}

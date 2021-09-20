@@ -1,6 +1,6 @@
-import { BookModel, UserModel } from "models";
+import { BookModel, UserModel } from "src/models";
 import { UserDescription } from "./userDescription";
 
 export type BookResponseModel = {
-  sellers: (UserDescription & UserModel)[];
+  sellers: (UserDescription & { user: UserModel })[];
 } & BookModel;

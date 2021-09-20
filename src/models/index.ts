@@ -5,5 +5,6 @@ export type { BookQueryModel } from "./bookQueryModel";
 export type { SellerModel } from "./sellerModel";
 export type { SellerSingleModel } from "./sellerSingleModel";
 export type { UserDescription } from "./userDescription";
-export type { SignInModel} from "./signInModel"
-export type { SignUpModel} from "./signUpModel"
+export type { SignInModel } from "./signInModel";
+export type { SignUpModel } from "./signUpModel";
+export type { JwtModel } from "./jwtModel";
