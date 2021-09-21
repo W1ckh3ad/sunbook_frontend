@@ -63,7 +63,11 @@ const Book: React.VFC<BookResponseModel> = ({
             style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
           >
             {sellers.map((x: UserDescription & { user: UserModel }) => (
-              <SellerCard {...x} key={x.user.userId} bookId={uid} />
+              <SellerCard
+                {...x}
+                key={x.user.userId}
+                book={{ uid, description, author, isbn }}
+              />
             ))}
           </div>
         )}

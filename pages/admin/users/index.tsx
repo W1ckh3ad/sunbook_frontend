@@ -13,7 +13,9 @@ const Users: React.VFC<{ data?: UserModel[] }> = ({ data }) => {
       <Head>
         <title>Users</title>
       </Head>
+
       <Box sx={{ overflowX: "auto", p: 2 }}>
+        <Link href="/admin/users/add">Add User</Link>
         <table>
           <thead>
             <tr>

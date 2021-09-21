@@ -7,10 +7,10 @@ export const useShoppingCart = () => {
     { books: [], vouchers: [] }
   );
 
-  const addBook = (bookId: number, sellerId: number) => {
+  const addBook = (bookId: number, sellerId: number,  description: string, author: string, isbn: string) => {
     setShoppingCart((oldState: ShoppingCart) => ({
       ...oldState,
-      books: [...oldState.books, { bookId, sellerId }],
+      books: [...oldState.books, { bookId, sellerId, description, author, isbn }],
     }));
   };
   const addVoucher = (voucher: Voucher) => {

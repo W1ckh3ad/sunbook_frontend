@@ -16,6 +16,12 @@ export type Voucher = {
   receiverMail?: string;
 };
 export type ShoppingCart = {
-  books: { sellerId: number; bookId: number }[];
+  books: {
+    sellerId: number;
+    bookId: number;
+    description: string;
+    author: string;
+    isbn: string;
+  }[];
   vouchers: Voucher[];
 };

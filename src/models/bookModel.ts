@@ -6,7 +6,7 @@ export interface BookModel {
   author: string;
   description: string;
   picture: string;
-  isbn: number;
+  isbn: string;
   publisher: string;
   language: string;
   releaseDate: Date;

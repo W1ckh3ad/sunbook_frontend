@@ -71,7 +71,7 @@ const Header: React.VFC<IHeaderProps> = () => {
     console.log(jwtObj, isAdmin);
     setIsAdmin(isAdmin);
     setIsLoggedIn(jwtObj !== undefined);
-  }, []);
+  });
   const accountNav = accountNavHandler(isLoggedIn);
   return (
     <div>

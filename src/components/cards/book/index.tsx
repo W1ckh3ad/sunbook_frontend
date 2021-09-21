@@ -7,7 +7,7 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import { ChevronRight } from "@mui/icons-material";
+import { ChevronRight, Description } from "@mui/icons-material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { BookModel, UserDescription } from "src/models";
 import React from "react";
@@ -38,6 +38,7 @@ const BookCard: React.VFC<BookModel & UserDescription & { sellerId?: number }> =
     title,
     uid,
     sellerId,
+    description
   }) => {
     const { addBook, shoppingCart } = useShoppingCart();
     const classes = useStyles();
@@ -69,7 +70,7 @@ const BookCard: React.VFC<BookModel & UserDescription & { sellerId?: number }> =
         </CardContent>
         <CardActions className={classes.actions}>
           {sellerId && (
-            <Button type="button" onClick={() => addBook(uid, sellerId)}>
+            <Button type="button" onClick={() => addBook(uid, sellerId, title, description, author, isbn)}>
               In den Warenkorb ({count})
             </Button>
           )}

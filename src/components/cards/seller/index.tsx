@@ -27,8 +27,11 @@ const useStyles = makeStyles(() =>
 );
 
 const SellerCard: React.VFC<
-  UserDescription & { user: UserModel; bookId: number }
-> = ({ userDescription, user, bookId }) => {
+  UserDescription & {
+    user: UserModel;
+    book: { uid: number; author: string; isbn: string; description: string };
+  }
+> = ({ userDescription, user, book }) => {
   const {
     userId,
     city,
@@ -40,20 +43,20 @@ const SellerCard: React.VFC<
     lastName,
     shopName,
   } = user;
-  const { addBook, shoppingCart } = useShoppingCart();
+  const { addBook, shoppingCart} = useShoppingCart();
   const classes = useStyles();
   const [count, setCount] = React.useState(0);
   React.useEffect(() => {
     setCount(
       shoppingCart.books.filter(
-        (current) => current.bookId === bookId && current.sellerId === userId
+        (current) => current.bookId === book.uid && current.sellerId === userId
       ).length
     );
   }, []);
   React.useEffect(() => {
     setCount(
       shoppingCart.books.filter(
-        (current) => current.bookId === bookId && current.sellerId === userId
+        (current) => current.bookId === book.uid && current.sellerId === userId
       ).length
     );
   }, [shoppingCart]);
@@ -73,7 +76,12 @@ const SellerCard: React.VFC<
         </Typography>
       </CardContent>
       <CardActions className={classes.actions}>
-        <Button type="button" onClick={() => addBook(bookId, userId)}>
+        <Button
+          type="button"
+          onClick={() =>
+            addBook(book.uid, userId, book.description, book.author, book.isbn)
+          }
+        >
           In den Warenkorb ({count})
         </Button>
         <Link href={`/seller/${userId}`} passHref>
