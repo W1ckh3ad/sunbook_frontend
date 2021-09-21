@@ -8,3 +8,14 @@ export type { UserDescription } from "./userDescription";
 export type { SignInModel } from "./signInModel";
 export type { SignUpModel } from "./signUpModel";
 export type { JwtModel } from "./jwtModel";
+
+export type Voucher = {
+  value: number;
+  description: string;
+  receiverId?: number;
+  receiverMail?: string;
+};
+export type ShoppingCart = {
+  books: { sellerId: number; bookId: number }[];
+  vouchers: Voucher[];
+};

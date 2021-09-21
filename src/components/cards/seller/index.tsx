@@ -12,6 +12,7 @@ import { createStyles, makeStyles } from "@mui/styles";
 import { UserDescription, UserModel } from "src/models";
 import React from "react";
 import Link from "next/link";
+import { useShoppingCart } from "src/hooks/useShoppingCart";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,11 +26,9 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const SellerCard: React.VFC<UserDescription & { user: UserModel }> = ({
-  userDescription,
-  user,
-}) => {
-  const classes = useStyles();
+const SellerCard: React.VFC<
+  UserDescription & { user: UserModel; bookId: number }
+> = ({ userDescription, user, bookId }) => {
   const {
     userId,
     city,
@@ -41,6 +40,23 @@ const SellerCard: React.VFC<UserDescription & { user: UserModel }> = ({
     lastName,
     shopName,
   } = user;
+  const { addBook, shoppingCart } = useShoppingCart();
+  const classes = useStyles();
+  const [count, setCount] = React.useState(0);
+  React.useEffect(() => {
+    setCount(
+      shoppingCart.books.filter(
+        (current) => current.bookId === bookId && current.sellerId === userId
+      ).length
+    );
+  }, []);
+  React.useEffect(() => {
+    setCount(
+      shoppingCart.books.filter(
+        (current) => current.bookId === bookId && current.sellerId === userId
+      ).length
+    );
+  }, [shoppingCart]);
   return (
     <Card className={classes.container} variant="outlined">
       <CardHeader title={shopName} subheader={lastName + ", " + firstName} />
@@ -57,7 +73,9 @@ const SellerCard: React.VFC<UserDescription & { user: UserModel }> = ({
         </Typography>
       </CardContent>
       <CardActions className={classes.actions}>
-        <Button type="button">In den Warenkorb</Button>
+        <Button type="button" onClick={() => addBook(bookId, userId)}>
+          In den Warenkorb ({count})
+        </Button>
         <Link href={`/seller/${userId}`} passHref>
           <IconButton component="a" aria-label="Zum Verkäufer">
             <ChevronRight />
