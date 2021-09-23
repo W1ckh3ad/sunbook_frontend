@@ -6,13 +6,15 @@ import {
   CardActions,
   IconButton,
   Button,
+  Snackbar,
 } from "@mui/material";
-import { ChevronRight, Description } from "@mui/icons-material";
+import { ChevronRight } from "@mui/icons-material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { BookModel, UserDescription } from "src/models";
 import React from "react";
 import Link from "next/link";
 import { useShoppingCart } from "src/hooks/useShoppingCart";
+import Alert from "src/components/Alert";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,11 +40,12 @@ const BookCard: React.VFC<BookModel & UserDescription & { sellerId?: number }> =
     title,
     uid,
     sellerId,
-    description
+    description,
   }) => {
     const { addBook, shoppingCart } = useShoppingCart();
     const classes = useStyles();
     const [count, setCount] = React.useState(0);
+    const [open, setOpen] = React.useState(false);
     React.useEffect(() => {
       setCount(
         shoppingCart.books.filter(
@@ -57,6 +60,13 @@ const BookCard: React.VFC<BookModel & UserDescription & { sellerId?: number }> =
         ).length
       );
     }, [shoppingCart]);
+    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+      if (reason === "clickaway") {
+        return;
+      }
+
+      setOpen(false);
+    };
     return (
       <Card className={classes.container} variant="outlined">
         <CardHeader title={title} subheader={author} />
@@ -70,9 +80,30 @@ const BookCard: React.VFC<BookModel & UserDescription & { sellerId?: number }> =
         </CardContent>
         <CardActions className={classes.actions}>
           {sellerId && (
-            <Button type="button" onClick={() => addBook(uid, sellerId, title, description, author, isbn)}>
-              In den Warenkorb ({count})
-            </Button>
+            <>
+              <Button
+                type="button"
+                onClick={() => {
+                  setOpen(true);
+                  addBook(uid, sellerId, title, description, author, isbn, price);
+                }}
+              >
+                In den Warenkorb ({count})
+              </Button>
+              <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="success"
+                  sx={{ width: "100%" }}
+                >
+                  Item '{title}' added to shopping cart ({count})
+                </Alert>
+              </Snackbar>
+            </>
           )}
           <Link href={`/books/${uid}`} passHref>
             <IconButton component="a" aria-label="Zur Produktseite">

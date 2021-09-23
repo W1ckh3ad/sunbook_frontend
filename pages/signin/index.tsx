@@ -15,6 +15,8 @@ import Link from "src/components/Link";
 import * as yup from "yup";
 import { useRouter } from "next/router";
 import axios from "src/utils/httpClient";
+import parseJwt from "src/utils/parseJwt";
+import Cookies from "js-cookie";
 
 export default function SignIn() {
   const router = useRouter();
@@ -29,8 +31,8 @@ export default function SignIn() {
 
   const handleSubmit = async (values: SignInModel) => {
     const { jwt } = (await axios.post("account/authenticate", values)).data;
-    const date = new Date(new Date().getTime() + 1000 * 60 * 60 * 10);
-    document.cookie = `jwt=${jwt}; expires=${date.toUTCString()}; path=/`;
+    const date = new Date(parseJwt(jwt).exp * 1000);
+    Cookies.set("jwt", jwt, { expires: date });
     router.push({ pathname: "/" });
   };
 

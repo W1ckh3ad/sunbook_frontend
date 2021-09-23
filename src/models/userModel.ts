@@ -10,6 +10,5 @@ export interface UserModel {
   role: string;
   shopName: string;
   favPayment: string;
+  password: string;
 }
-
-

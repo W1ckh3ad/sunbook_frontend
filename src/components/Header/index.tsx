@@ -9,6 +9,7 @@ import {
   Login,
   PersonOutline,
   AppRegistration,
+  Logout,
 } from "@mui/icons-material";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -28,6 +29,7 @@ const mainNav = [
     name: "Bücher",
     href: "/books",
   },
+  { name: "Gutscheine", href: "/buyVoucher" },
 ];
 
 const accountNavHandler = (login: boolean = false) => {
@@ -38,6 +40,7 @@ const accountNavHandler = (login: boolean = false) => {
         icon: PersonOutline,
         href: "/account",
       },
+      { name: "Logout", icon: Logout, href: "/logout" },
     ];
   }
   return [
@@ -66,11 +69,12 @@ const Header: React.VFC<IHeaderProps> = () => {
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   React.useEffect(() => {
+    console.log("render head");
     const jwtObj = parseJwt(cookie.get("jwt"));
     const isAdmin = jwtObj.role === "admin";
-    console.log(jwtObj, isAdmin);
     setIsAdmin(isAdmin);
-    setIsLoggedIn(jwtObj !== undefined);
+    console.log("JWTashdnsan das", jwtObj);
+    setIsLoggedIn(jwtObj.exp !== undefined);
   });
   const accountNav = accountNavHandler(isLoggedIn);
   return (

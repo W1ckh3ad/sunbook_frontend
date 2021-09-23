@@ -1,19 +1,22 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import { Button, Snackbar, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
-import { Formik } from "formik";
-import * as yup from "yup";
-import { Voucher } from "src/models";
-import { TextField, Button, Snackbar } from "@mui/material";
+import Container from "@mui/material/Container";
 import InputAdornment from "@mui/material/InputAdornment";
-import { useShoppingCart } from "src/hooks/useShoppingCart";
-import Link from "src/components/Link";
+import Typography from "@mui/material/Typography";
+import Cookies from "cookies";
+import { Formik } from "formik";
+import { GetServerSideProps } from "next";
+import React from "react";
 import Alert from "src/components/Alert";
+import { JwtModel, Voucher } from "src/models";
+import parseJwt from "src/utils/parseJwt";
+import axios from "src/utils/httpClient";
+import * as yup from "yup";
+import JsCookies from "js-cookie";
 
 export default function SignUp() {
-  const { addVoucher } = useShoppingCart();
   const [open, setOpen] = React.useState(false);
+  const [code, setCode] = React.useState("");
   const initValues: Voucher = {
     value: 15,
     description: "",
@@ -22,10 +25,15 @@ export default function SignUp() {
     value: yup.number().positive().required().max(999).min(0).integer(),
     description: yup.string().required().min(3),
   });
-
+  const jwt = JsCookies.get("jwt");
   const handleSubmit = async (values: Voucher) => {
+    const res = await axios.post("admin/vouchers", values, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    setCode(res.data.productCode);
     setOpen(true);
-    addVoucher({ ...values });
   };
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -45,9 +53,9 @@ export default function SignUp() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Gutschein erstellen
+          Gutschrift erstellen
         </Typography>
-        <Link href="/shoppingcart">Zum Warenkorb</Link>
+        {code !== "" && <div>CODE: {code}</div>}
         <Formik
           initialValues={initValues}
           validationSchema={validation}
@@ -128,7 +136,7 @@ export default function SignUp() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                In den Warenkorb
+                Gutschrift erstellen
               </Button>
             </Box>
           )}
@@ -146,3 +154,22 @@ export default function SignUp() {
     </Container>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const cookies = new Cookies(req, res);
+  const jwt = cookies.get("jwt");
+
+  const auth = parseJwt(jwt) as JwtModel;
+  if (jwt === "" || jwt === undefined || auth.role !== "admin") {
+    return {
+      redirect: {
+        destination: "/403",
+        permanent: false,
+      },
+      props: {},
+    };
+  }
+  return {
+    props: {},
+  };
+};

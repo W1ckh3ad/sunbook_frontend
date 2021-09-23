@@ -9,18 +9,18 @@ import parseJwt from "src/utils/parseJwt";
 import JsCookies from "js-cookie";
 import { FormikHelpers, FormikValues } from "formik";
 
-const User: React.VFC<UserModel> = (props) => {
-  const { userId } = props;
+const UserAdd: React.VFC<UserModel> = (props) => {
   const jwt = JsCookies.get("jwt");
   const handleSubmit = async (
     values: FormikValues,
     helper: FormikHelpers<FormikValues>
   ) => {
+    debugger;
     helper.setSubmitting(true);
     if (jwt === "") {
       return helper.setSubmitting(false);
     }
-    const res = await axios.put("admin/users/" + userId, values, {
+    const res = await axios.post("admin/users", values, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -31,7 +31,7 @@ const User: React.VFC<UserModel> = (props) => {
   return (
     <>
       <Head>
-        <title>User {userId}</title>
+        <title>User erstellen</title>
       </Head>
       <main className="responsive">
         <UserForm model={props} onSubmit={handleSubmit} />
@@ -40,14 +40,9 @@ const User: React.VFC<UserModel> = (props) => {
   );
 };
 
-export default User;
+export default UserAdd;
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  res,
-  params,
-}) => {
-  const { id } = params as { id: string };
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const cookies = new Cookies(req, res);
   const jwt = cookies.get("jwt");
 
@@ -61,12 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {},
     };
   }
-  const { data: user } = await axios.get("admin/users/" + id, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
   return {
-    props: { ...user },
+    props: {},
   };
 };

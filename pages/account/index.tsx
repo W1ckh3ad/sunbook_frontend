@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Cookies from "cookies";
 import axios from "src/utils/httpClient";
 import { UserModel } from "src/models";
+import Link from "src/components/Link";
 
 const Account: React.VFC<UserModel> = ({
   city,
@@ -47,6 +48,17 @@ const Account: React.VFC<UserModel> = ({
             {userId} {role}
           </div>
         </Box>
+
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Typography component="h2" variant="h5">
+            Aktionen
+          </Typography>
+          <Link href="/account/orders"> Bestellungen anzeigen</Link>
+          <Link href="/account/edit"> Benutzeradaten ändern</Link>
+          <Link href="/account/changePassword"> Passwort ändern</Link>
+          <Link href="/account/changeRole"> Rolle ändern</Link>
+          <Link href="/account/books"> Eigene Bücher verwalten</Link>
+        </Box>
       </Container>
     </>
   );
@@ -60,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       redirect: {
         destination: "/signin",
-        permanent: false
+        permanent: false,
       },
       props: {},
     };

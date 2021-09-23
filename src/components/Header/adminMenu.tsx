@@ -39,17 +39,22 @@ const AdminMenu: React.VFC = ({}) => {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}>
+          <Link href="/admin/books" style={{ textDecoration: "none" }}>
+            Bücherverwaltung
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
           <Link href="/admin/users" style={{ textDecoration: "none" }}>
             Bernutzerverwaltung
           </Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <Link href="/admin/users" style={{ textDecoration: "none" }}>
+          <Link href="/admin/orders" style={{ textDecoration: "none" }}>
             Bestellungen
           </Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <Link href="/admin/users" style={{ textDecoration: "none" }}>
+          <Link href="/admin/createCode" style={{ textDecoration: "none" }}>
             Gutschriften erstellen
           </Link>
         </MenuItem>

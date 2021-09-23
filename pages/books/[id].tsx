@@ -53,7 +53,11 @@ const Book: React.VFC<BookResponseModel> = ({
           })}
         </Typography>
         <div>
-          <img src={picture} alt={title + " Cover"} />
+          <img
+            src={picture}
+            alt={title + " Cover"}
+            style={{ maxHeight: "600px", objectFit: "scale-down" }}
+          />
         </div>
         <Typography variant="body1" component="p">
           {description}
@@ -66,7 +70,7 @@ const Book: React.VFC<BookResponseModel> = ({
               <SellerCard
                 {...x}
                 key={x.user.userId}
-                book={{ uid, description, author, isbn }}
+                book={{ uid, title, description, author, isbn, price }}
               />
             ))}
           </div>

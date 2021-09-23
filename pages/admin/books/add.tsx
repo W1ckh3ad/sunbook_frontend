@@ -2,15 +2,14 @@ import Cookies from "cookies";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React from "react";
-import UserForm from "src/components/userForm";
-import { JwtModel, UserModel } from "src/models";
+import { BookModel, JwtModel, UserModel } from "src/models";
 import axios from "src/utils/httpClient";
 import parseJwt from "src/utils/parseJwt";
 import JsCookies from "js-cookie";
 import { FormikHelpers, FormikValues } from "formik";
+import BookForm from "src/components/BookForm";
 
-const User: React.VFC<UserModel> = (props) => {
-  const { userId } = props;
+const User: React.VFC<BookModel> = (props) => {
   const jwt = JsCookies.get("jwt");
   const handleSubmit = async (
     values: FormikValues,
@@ -20,7 +19,7 @@ const User: React.VFC<UserModel> = (props) => {
     if (jwt === "") {
       return helper.setSubmitting(false);
     }
-    const res = await axios.put("admin/users/" + userId, values, {
+    const res = await axios.post("admin/books/", values, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -31,10 +30,10 @@ const User: React.VFC<UserModel> = (props) => {
   return (
     <>
       <Head>
-        <title>User {userId}</title>
+        <title>Book erstellen</title>
       </Head>
       <main className="responsive">
-        <UserForm model={props} onSubmit={handleSubmit} />
+        <BookForm model={props} onSubmit={handleSubmit} />
       </main>
     </>
   );
@@ -45,9 +44,7 @@ export default User;
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   res,
-  params,
 }) => {
-  const { id } = params as { id: string };
   const cookies = new Cookies(req, res);
   const jwt = cookies.get("jwt");
 
@@ -61,12 +58,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {},
     };
   }
-  const { data: user } = await axios.get("admin/users/" + id, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
   return {
-    props: { ...user },
+    props: {  },
   };
 };

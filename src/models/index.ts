@@ -19,9 +19,11 @@ export type ShoppingCart = {
   books: {
     sellerId: number;
     bookId: number;
+    title: string;
     description: string;
     author: string;
     isbn: string;
+    price: number;
   }[];
   vouchers: Voucher[];
 };
